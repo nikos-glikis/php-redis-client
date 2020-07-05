@@ -11,6 +11,7 @@
 namespace RedisClient\Command\Traits\Version2x6;
 
 use RedisClient\Command\Parameter\Parameter;
+use RedisClient\Command\Response\ResponseParser;
 
 /**
  * Keys Commands
@@ -18,6 +19,38 @@ use RedisClient\Command\Parameter\Parameter;
  */
 trait KeysCommandsTrait {
 
+    public function ghwMultiGet(array $keys)
+    {
+        //$params = [$startkey, $stopKey, $limit];
+        return $this->returnCommand(['GHWMULTIGET'], null, $keys, ResponseParser::PARSE_ASSOC_ARRAY);
+    }
+
+
+    public function ghwScan($startkey, $stopKey, $limit)
+    {
+        $params = [$startkey, $stopKey, $limit];
+        return $this->returnCommand(['GHWSCAN'], null, $params, ResponseParser::PARSE_ASSOC_ARRAY);
+    }
+
+    public function ghwKeys($startkey, $stopKey, $limit)
+    {
+        $params = [$startkey, $stopKey, $limit];
+        return $this->returnCommand(['GHWKEYS'], null, $params);
+    }
+
+    public function multiDel($keys)
+    {
+        if (!is_array($keys)) {
+            $keys = (array)$keys;
+        }
+        return $this->returnCommand(['GHWMULTIDEL'], $keys, $keys);
+    }
+
+    public function multiSet(array $keys)
+    {  
+        return $this->returnCommand(['GHWMULTISET'], $keys, $keys);
+    }
+    
     /**
      * DEL key [key ...]
      * Available since 1.0.0.
